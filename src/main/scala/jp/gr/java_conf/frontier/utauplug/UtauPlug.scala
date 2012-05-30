@@ -5,6 +5,7 @@ import scala.io.Source
 class UtauPlug(var filepath: String) {
   var list = List[UtauElement]()
   var setting, prev, next: UtauElement = null
+  def node(i: Int) = Node(this, list(i))
 }
 
 object UtauPlug {
