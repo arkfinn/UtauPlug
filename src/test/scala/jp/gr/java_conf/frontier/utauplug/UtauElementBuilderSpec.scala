@@ -7,23 +7,23 @@ import scala.io.Source
 import scala.collection.mutable.StringBuilder
 
 @RunWith(classOf[JUnitRunner])
-class UtauElementSpec extends Specification {
+class UtauElementBuilderSpec extends Specification {
 
   "attr" should {
     "set attr Volume" in {
       val elm = new UtauElementBuilder()
       elm.attr("Volume", "100")
-      elm.build.attr("Volume") must be matching "100"
+      elm.attr("Volume") must be matching "100"
     }
     "set and update attr Volume" in {
       val elm = new UtauElementBuilder()
       elm.attr("Volume", "100")
       elm.attr("Volume", "200")
-      elm.build.attr("Volume") must be matching "200"
+      elm.attr("Volume") must be matching "200"
     }
     "get null attr" in {
       val elm = new UtauElementBuilder()
-      elm.build.attr("Volume") must be matching ""
+      elm.attr("Volume") must be matching ""
     }
   }
 
@@ -31,52 +31,52 @@ class UtauElementSpec extends Specification {
     val elm = new UtauElementBuilder()
     "lyric" in {
       elm.lyric = "‚¤"
-      elm.build.lyric must be matching "‚¤"
+      elm.lyric must be matching "‚¤"
     }
 
     "Note" in {
       elm.note = Note(30)
-      elm.build.note.num must_== 30
+      elm.note.num must_== 30
     }
     "Note from num" in {
       elm.noteNum = 24
-      elm.build.note.num must_== 24
+      elm.note.num must_== 24
     }
     "NoteNum" in {
       elm.noteNum = 24
-      elm.build.noteNum must_== 24
+      elm.noteNum must_== 24
     }
     "NoteNum error" in {
       elm.attr("NoteNum", "abc")
-      elm.build.noteNum must_== 0
+      elm.noteNum must_== 0
     }
     "Length" in {
       elm.length = 100
-      elm.build.length must_== 100
+      elm.length must_== 100
     }
     "Moduration" in {
       elm.moduration = 50
-      elm.build.moduration must_== 50
+      elm.moduration must_== 50
     }
     "Moduration max 200" in {
       elm.moduration = 500
-      elm.build.moduration must_== 200
+      elm.moduration must_== 200
     }
     "Moduration min -200" in {
       elm.moduration = -300
-      elm.build.moduration must_== -200
+      elm.moduration must_== -200
     }
     "Intensity" in {
       elm.intensity = 100
-      elm.build.intensity must_== 100
+      elm.intensity must_== 100
     }
     "Intensity max 200" in {
       elm.intensity = 500
-      elm.build.intensity must_== 200
+      elm.intensity must_== 200
     }
     "Intensity min 0" in {
       elm.intensity = -200
-      elm.build.intensity must_== 0
+      elm.intensity must_== 0
     }
 
     //Flags
@@ -89,16 +89,16 @@ class UtauElementSpec extends Specification {
       elm.attr("Volume", "100")
       elm.attr("Moduration", "100")
       elm.clear
-      elm.build.attr("Volume") must be matching ""
-      elm.build.attr("Moduration") must be matching ""
+      elm.attr("Volume") must be matching ""
+      elm.attr("Moduration") must be matching ""
     }
     "Volume attr clear" in {
       val elm = new UtauElementBuilder()
       elm.attr("Volume", "100")
       elm.attr("Moduration", "100")
       elm.clear("Volume")
-      elm.build.attr("Volume") must be matching ""
-      elm.build.attr("Moduration") must be matching "100"
+      elm.attr("Volume") must be matching ""
+      elm.attr("Moduration") must be matching "100"
     }
   }
 
@@ -106,65 +106,29 @@ class UtauElementSpec extends Specification {
     val elm = new UtauElementBuilder()
     "rest note" in {
       elm.lyric = "R"
-      elm.build.isRest must beTrue
+      elm.isRest must beTrue
     }
     "normal note" in {
       elm.lyric = "‚ "
-      elm.build.isRest must beFalse
+      elm.isRest must beFalse
     }
   }
 
   "isSelected" should {
     "prev" in {
       val elm = new UtauElementBuilder("#PREV")
-      elm.build.isSelected must beFalse
+      elm.isSelected must beFalse
     }
     "next" in {
       val elm = new UtauElementBuilder("#NEXT")
-      elm.build.isSelected must beFalse
+      elm.isSelected must beFalse
     }
     "note" in {
       val elm = new UtauElementBuilder("#0004")
-      elm.build.isSelected must beTrue
+      elm.isSelected must beTrue
     }
   }
 
-  "output" should {
-    "test1" in {
-      val elm = new UtauElementBuilder("#0004")
-      elm.length = 240
-      elm.lyric = "‚©"
-      elm.noteNum = 62
-      elm.intensity = 100
-      elm.moduration = 0
-      elm.attr("PBS", "-45")
-      elm.attr("PBW", "89")
-      val sb = new StringBuilder
-      elm.build.output(sb)
 
-      val in = getClass().getResourceAsStream("UtauElement_OutputTest.ust")
-      try {
-        val sample = Source.fromInputStream(in).getLines.toList
-        sb.toString.split(elm.build.nl).toList must haveTheSameElementsAs(sample)
-      } finally {
-        in.close
-      }
-    }
-  }
 
-  "builder" should {
-    "get builder" in {
-      val a = new UtauElement
-      a.intensity must_== 100
-      val b = a.builder
-      b.intensity += 10
-      val c = b.build
-      c.intensity must_== 110
-      val d = c.builder
-      d.intensity += 10
-      val e = d.build
-      e.intensity must_== 120
-
-    }
-  }
 }

@@ -5,7 +5,7 @@ class Node private (parent: UtauPlug, element: UtauElement) {
   def nonEmpty = (element != null)
 
   def get: UtauElement = {
-    if (isEmpty) throw new NoSuchElementException
+    if (isEmpty) throw new NoSuchElementException("element is empty")
     element
   }
 
@@ -30,6 +30,9 @@ class Node private (parent: UtauPlug, element: UtauElement) {
  * Nodeのファクトリ
  */
 object Node {
+  def apply(parent: UtauPlug, i: Int): Node = {
+    new Node(parent, parent.list(i))
+  }
   def apply(parent: UtauPlug, element: UtauElement): Node = {
     new Node(parent, element)
   }

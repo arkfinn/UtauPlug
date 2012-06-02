@@ -11,6 +11,21 @@ Utauƒvƒ‰ƒOƒCƒ“‚ðì¬‚·‚éÛ‚É–Ê“|‚Èustƒtƒ@ƒCƒ‹‚Ì“Ç‚Ýž‚Ý‚âAˆêŠ‡ˆ—‚ðŠÈ’P‚És‚¤‚
 Žg‚¢•û
 ----
 
-	ƒeƒXƒgƒR[ƒh
+	//ƒtƒ@ƒCƒ‹ƒpƒX‚ðŽw’è‚µ‚Ä“Ç‚Ýž‚ÝB‹N“®Žž‚Ìargs—˜—p‚ð‘z’è
+	val plug = UtauPlug.fromFile(filePath)
+	//execŽÀs‚ÅŠe—v‘f‚ðƒ‹[ƒv‚Å‚«‚é
+	val plug2 = plug.exec { e =>
+	  //“Á‚ÉC³‚ð‚µ‚È‚¢ê‡‚ÍaddŽÀs‚Å‚»‚Ì‚Ü‚Ü‚Ì’l‚ª“ü‚é
+	  e.add()
+	  //e.node‚ÅnodeŽæ“¾Bnode.get‚Å‘ÎÛ‚Ì—v‘fAnode.prev,node.next‚Å‘OŒã‚Ì—v‘f‚ªŽæ‚ê‚é
+	  val elm = e.node.get
+	  //builder‚ðŒÄ‚Ô‚±‚Æ‚Å—v‘f‚ð‘€ì‚Å‚«‚é
+	  val b = elm.bulder
+	  b.intensity += 10
+	  //•ÏXŒã‚Ì—v‘f‚ðadd
+	  e.add(b.build)
+	  //V‹K‚Ì—v‘f‚ð’Ç‰Á‚·‚é‚±‚Æ‚à‚Å‚«‚é
+	  e.add(new UtauElement(Map("Intensity" -> "10", "Lyric" -> "‚Ä‚·")))
+	}
 
 ‚»‚Ì‚¤‚¿‘‚«‚Ü‚·B

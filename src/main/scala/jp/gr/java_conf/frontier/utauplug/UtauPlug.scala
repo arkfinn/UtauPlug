@@ -1,29 +1,69 @@
 package jp.gr.java_conf.frontier.utauplug
 import java.io.FileInputStream
 import scala.io.Source
+import scala.collection.mutable.MutableList
+import scala.collection.mutable.ListBuffer
+import scala.annotation.tailrec
+import java.io.FileWriter
+import java.io.File
 
 class UtauPlug(var filepath: String) {
   var list = List[UtauElement]()
   var setting, prev, next: UtauElement = null
   def node(i: Int) = Node(this, list(i))
+
+  //  def foreach[U](f: Node => U): Unit = for (a <- list) f(Node(this, a))
+
+  class ExecElement(val node: Node) {
+    var list = new ListBuffer[UtauElement]
+    def add(e: UtauElement) { list += e }
+    def add() { add(node.get) }
+  }
+
+  def exec(f: ExecElement => Unit): UtauPlug = {
+    val res = new ListBuffer[UtauElement]
+    for (a <- list) {
+      val e = new ExecElement(Node(this, a))
+      f(e)
+      for (b <- e.list) res += b
+    }
+    val u = new UtauPlug(filepath)
+    u.list = res.toList
+    u.setting = setting
+    u.prev = prev
+    u.next = next
+    u
+  }
+
+  def output(filepath: String) = {
+    val s = new StringBuilder
+    for (a <- list) a.output(s)
+    val filewriter = new FileWriter(new File(filepath));
+    try {
+      filewriter.write(s.toString());
+    } finally {
+      filewriter.close();
+    }
+  }
+
 }
 
 object UtauPlug {
   def fromFile(filepath: String): UtauPlug = {
-    val res = new UtauPlug(filepath)
+
     val out = new FileInputStream(filepath)
+    val list = ListBuffer.empty[UtauElementBuilder]
+    var setting, prev, next: UtauElementBuilder = null
     try {
-      val output = Source.fromInputStream(out)
-      var elm: UtauElement = null
-      for (line <- output.getLines() if line.nonEmpty) {
+      var elm: UtauElementBuilder = null
+      for (line <- Source.fromInputStream(out).getLines() if line.nonEmpty) {
         if (line.startsWith("[")) {
-          elm = new UtauElement
-          elm.blockName = line.slice(1, line.size - 1)
-          line match {
-            case "[#SETTING]" => res.setting = elm
-            case "[#PREV]" => res.prev = elm
-            case "[#NEXT]" => res.next = elm
-            case _ => res.list = res.list ::: List(elm)
+          elm = new UtauElementBuilder(line.slice(1, line.size - 1))
+          elm.blockName match {
+            case "#SETTING" => setting = elm
+            case "#PREV" => prev = elm
+            case "#NEXT" => next = elm
+            case _ => list += elm
           }
         } else {
           if (line.contains("=")) {
@@ -35,6 +75,11 @@ object UtauPlug {
     } finally {
       out.close
     }
+    val res = new UtauPlug(filepath)
+    if (setting != null) res.setting = setting.build
+    if (prev != null) res.prev = prev.build
+    if (next != null) res.next = next.build
+    res.list = list.map(_.build).toList
     res
   }
 
@@ -93,24 +138,7 @@ object UtauPlug {
 //            }
 //        }
 //
-//        public void ElementForEach(UtauElementEventHandler callback)
-//        {
-//            int index = 0;
-//
-//            UtauElement[] list = Elements.ToArray();
-//            for (int i = 0; i < list.Length; i++)
-//            {
-//                UtauElement now = list[i];
-//                if (now.IsSelected())
-//                {
-//                    UtauElement prev = i == 0 ? new UtauElement("[#PREV]") : list[i - 1];
-//                    UtauElement next = i == list.Length - 1 ? new UtauElement("[#NEXT]") : list[i + 1];
-//                    callback(index, prev, now, next);
-//                    index++;
-//                }
-//            }
-//        }
-//
+
 //        public void InsertBefore(UtauElement elm, UtauElement insert_elm)
 //        {
 //            insert_elm.BlockName = "[#INSERT]";
