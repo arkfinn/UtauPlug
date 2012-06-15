@@ -1,19 +1,19 @@
 package jp.gr.java_conf.frontier.utauplug
 
 /**
- * ‰¹ŠK‚ğˆµ‚¤ƒNƒ‰ƒX
- * ƒf[ƒ^“I‚É‚Í‚½‚¾‚ÌInt‚¾‚ªA‰¹–¼æ“¾‚È‚Ç‚Ì‹@”\‚ğ’ñ‹Ÿ‚·‚éB
+ * éŸ³éšã‚’æ‰±ã†ã‚¯ãƒ©ã‚¹
+ * ãƒ‡ãƒ¼ã‚¿çš„ã«ã¯ãŸã ã®Intã ãŒã€éŸ³åå–å¾—ãªã©ã®æ©Ÿèƒ½ã‚’æä¾›ã™ã‚‹ã€‚
  */
 class Note private (val num: Int) {
 
   /**
-   * ‚±‚Ì‰¹‚ÌƒIƒNƒ^[ƒu’l‚ğ•Ô‚·
+   * ã“ã®éŸ³ã®ã‚ªã‚¯ã‚¿ãƒ¼ãƒ–å€¤ã‚’è¿”ã™
    * @return octave value
    */
   def octave: Int = (num - 12) / 12
 
   /**
-   * ‚±‚Ì‰¹‚Ì‰¹–¼‚ğ•Ô‚·
+   * ã“ã®éŸ³ã®éŸ³åã‚’è¿”ã™
    * @return note name
    */
   def name: String = num % 12 match {
@@ -32,7 +32,7 @@ class Note private (val num: Int) {
   }
 
   /**
-   * ‰¹–¼+ƒIƒNƒ^[ƒu‚Ì•¶š—ñ‚ğ•Ô‚·
+   * éŸ³å+ã‚ªã‚¯ã‚¿ãƒ¼ãƒ–ã®æ–‡å­—åˆ—ã‚’è¿”ã™
    * @return name+octave
    */
   def fullName: String = name + octave
@@ -44,14 +44,14 @@ class Note private (val num: Int) {
  */
 object Note {
   /**
-   * ‰¹”Ô†‚©‚çNote‚ğ¶¬‚µ‚Ü‚·B
-   * ”Ô†‚ÍUTAU‚Å‚Ì—p—á‚ÉˆË‘¶‚µ‚Ü‚·‚ªA24=C1‚©‚ç‚ÌŒvZ‚É‚È‚è‚Ü‚·B
+   * éŸ³ç•ªå·ã‹ã‚‰Noteã‚’ç”Ÿæˆã—ã¾ã™ã€‚
+   * ç•ªå·ã¯UTAUã§ã®ç”¨ä¾‹ã«ä¾å­˜ã—ã¾ã™ãŒã€24=C1ã‹ã‚‰ã®è¨ˆç®—ã«ãªã‚Šã¾ã™ã€‚
    */
   def apply(num: Int): Note = new Note(num)
 
   /**
-   * ‰¹–¼AƒIƒNƒ^[ƒu‚©‚çNote‚ğì¬‚µ‚Ü‚·B
-   * ‰¹–¼‚ÍA-F‚¨‚æ‚Ña-fA#iƒVƒƒ[ƒvj‚Ü‚½‚Íbiƒtƒ‰ƒbƒgj‚É‘Î‰‚µ‚Ä‚¢‚Ü‚·B
+   * éŸ³åã€ã‚ªã‚¯ã‚¿ãƒ¼ãƒ–ã‹ã‚‰Noteã‚’ä½œæˆã—ã¾ã™ã€‚
+   * éŸ³åã¯A-FãŠã‚ˆã³a-fã€#ï¼ˆã‚·ãƒ£ãƒ¼ãƒ—ï¼‰ã¾ãŸã¯bï¼ˆãƒ•ãƒ©ãƒƒãƒˆï¼‰ã«å¯¾å¿œã—ã¦ã„ã¾ã™ã€‚
    */
   def apply(name: String, octave: Int): Note = {
     val num = name match {
@@ -77,9 +77,9 @@ object Note {
   }
 
   /**
-   * ‰¹–¼+ƒIƒNƒ^[ƒu‚©‚çNote‚ğì¬‚µ‚Ü‚·B
-   * apply(name, octave)‚Æ“¯‚¶‚Å‚·B
-   * @param fullName name+octave‚Ì•¶š—ñ —áF"C4", "Eb3", "C-2"
+   * éŸ³å+ã‚ªã‚¯ã‚¿ãƒ¼ãƒ–ã‹ã‚‰Noteã‚’ä½œæˆã—ã¾ã™ã€‚
+   * apply(name, octave)ã¨åŒã˜ã§ã™ã€‚
+   * @param fullName name+octaveã®æ–‡å­—åˆ— ä¾‹ï¼š"C4", "Eb3", "C-2"
    */
   def apply(fullName: String): Note = {
     val m = resolveFullName(fullName)
@@ -87,8 +87,8 @@ object Note {
   }
 
   /**
-   * ‰¹–¼+ƒIƒNƒ^[ƒu‚Ì•¶š—ñ‚ğ•ª‰ğ‚·‚é
-   * apply(fullName)—p‚ÌŠÖ”
+   * éŸ³å+ã‚ªã‚¯ã‚¿ãƒ¼ãƒ–ã®æ–‡å­—åˆ—ã‚’åˆ†è§£ã™ã‚‹
+   * apply(fullName)ç”¨ã®é–¢æ•°
    * @return (note name, octave)
    */
   def resolveFullName(fullName: String): (String, Int) = {

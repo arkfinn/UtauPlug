@@ -12,15 +12,15 @@ class UtauPlugSpec extends Specification {
     val a = "src/test/scala/jp/gr/java_conf/frontier/utauplug/UtauPlug_test.ust"
     val plug = UtauPlug.fromFile(a)
 
-    "ˆê‚Â–Ú‚Ì—v‘f‚ªæ“¾‚Å‚«‚Ä‚¢‚é‚±‚Æ" in {
+    "ä¸€ã¤ç›®ã®è¦ç´ ãŒå–å¾—ã§ãã¦ã„ã‚‹ã“ã¨" in {
       plug.list.size must_== 22
-      plug.list(0).lyric must_== "‚©"
+      plug.list(0).lyric must_== "ã‹"
       plug.list(0).blockName must_== "#0004"
     }
-    "—v‘f‚ª‡”Ô‚Éæ“¾‚Å‚«‚Ä‚¢‚é‚±‚Æ" in {
-      plug.list(0).lyric must_== "‚©"
-      plug.list(1).lyric must_== "‚é"
-      plug.list(2).lyric must_== "‚¢"
+    "è¦ç´ ãŒé †ç•ªã«å–å¾—ã§ãã¦ã„ã‚‹ã“ã¨" in {
+      plug.list(0).lyric must_== "ã‹"
+      plug.list(1).lyric must_== "ã‚‹"
+      plug.list(2).lyric must_== "ã„"
       plug.list(3).lyric must_== "R"
     }
   }
@@ -28,28 +28,28 @@ class UtauPlugSpec extends Specification {
   "node" should {
     val a = "src/test/scala/jp/gr/java_conf/frontier/utauplug/UtauPlug_test.ust"
     val plug = UtauPlug.fromFile(a)
-    "prev‚Ìˆê‚Â‘O‚ğæ“¾‚µ‚æ‚¤‚Æ‚µ‚½‚Æ‚«" in {
-      plug.node(0).prev.prev.isEmpty must_== true
+    "prevã®ä¸€ã¤å‰ã‚’å–å¾—ã—ã‚ˆã†ã¨ã—ãŸã¨ã" in {
+      plug.node(0).prev.get.prev.isEmpty must_== true
     }
-    "ˆê‚Â–Ú‚Ìƒm[ƒh‚©‚çPREVæ“¾" in {
-      plug.node(0).prev.get.lyric must_== "‚È"
+    "ä¸€ã¤ç›®ã®ãƒãƒ¼ãƒ‰ã‹ã‚‰PREVå–å¾—" in {
+      plug.node(0).prev.get.get.lyric must_== "ãª"
     }
-    "ˆê‚Â–Ú‚Ìƒm[ƒhæ“¾" in {
-      plug.node(0).get.lyric must_== "‚©"
+    "ä¸€ã¤ç›®ã®ãƒãƒ¼ãƒ‰å–å¾—" in {
+      plug.node(0).get.lyric must_== "ã‹"
     }
-    "“ñ‚Â–Ú‚Ìƒm[ƒh‚©‚ç‘O‚Ìƒm[ƒhæ“¾" in {
-      plug.node(1).prev.get.lyric must_== "‚©"
+    "äºŒã¤ç›®ã®ãƒãƒ¼ãƒ‰ã‹ã‚‰å‰ã®ãƒãƒ¼ãƒ‰å–å¾—" in {
+      plug.node(1).prev.get.get.lyric must_== "ã‹"
     }
-    "ˆê‚Â–Ú‚Ìƒm[ƒh‚©‚çŸ‚Ìƒm[ƒhæ“¾" in {
-      plug.node(0).next.get.lyric must_== "‚é"
+    "ä¸€ã¤ç›®ã®ãƒãƒ¼ãƒ‰ã‹ã‚‰æ¬¡ã®ãƒãƒ¼ãƒ‰å–å¾—" in {
+      plug.node(0).next.get.get.lyric must_== "ã‚‹"
     }
-    "ÅŒã‚Ìƒm[ƒh‚©‚çŸ‚Ìƒm[ƒhiNEXTjæ“¾" in {
-      plug.node(plug.list.size - 1).next.get.lyric must_== "‚È"
+    "æœ€å¾Œã®ãƒãƒ¼ãƒ‰ã‹ã‚‰æ¬¡ã®ãƒãƒ¼ãƒ‰ï¼ˆNEXTï¼‰å–å¾—" in {
+      plug.node(plug.list.size - 1).next.get.get.lyric must_== "ãª"
     }
 
   }
   //
-  //  //map‚Ì‚Ù‚¤‚ª‚¢‚¢‚©‚à
+  //  //mapã®ã»ã†ãŒã„ã„ã‹ã‚‚
   //  "foreach" should {
   //    val a = "src/test/scala/jp/gr/java_conf/frontier/utauplug/UtauPlug_test.ust"
   //    val plug = UtauPlug.fromFile(a)
@@ -64,37 +64,66 @@ class UtauPlugSpec extends Specification {
   //    }
   //  }
 
-  "exec" should {
+  //execã¯å»ƒæ­¢
+//  "exec" should {
+//    val a = "src/test/scala/jp/gr/java_conf/frontier/utauplug/UtauPlug_test.ust"
+//    val plug = UtauPlug.fromFile(a)
+//
+//    "intensity + 10" in {
+//      plug.node(2).get.intensity must_== 100
+//      val plug2 = plug.exec { e =>
+//        val b = e.node.get.builder
+//        b.intensity += 10
+//        e.add(b.build)
+//        e
+//      }
+//      plug2.node(2).get.intensity must_== 110
+//    }
+//
+//    "insert" in {
+//      val plug2 = plug.exec { e =>
+//        e.add()
+//        e.add(new UtauElement(Map("Intensity" -> "10", "Lyric" -> "ã¦ã™")))
+//      }
+//      plug2.node(0).get.intensity must_== 100
+//      plug2.node(0).get.lyric must_== "ã‹"
+//      plug2.node(1).get.intensity must_== 10
+//      plug2.node(1).get.lyric must_== "ã¦ã™"
+//      plug2.node(2).get.intensity must_== 100
+//      plug2.node(2).get.lyric must_== "ã‚‹"
+//      plug2.node(3).get.intensity must_== 10
+//      plug2.node(3).get.lyric must_== "ã¦ã™"
+//    }
+//  }
+
+    "flatmap" should {
     val a = "src/test/scala/jp/gr/java_conf/frontier/utauplug/UtauPlug_test.ust"
     val plug = UtauPlug.fromFile(a)
 
     "intensity + 10" in {
       plug.node(2).get.intensity must_== 100
-      val plug2 = plug.exec { e =>
-        val b = e.node.get.builder
+      val plug2 = plug.flatMap { n =>
+        val b = n.get.builder
         b.intensity += 10
-        e.add(b.build)
-        e
+        List(b.build)
       }
       plug2.node(2).get.intensity must_== 110
     }
 
     "insert" in {
-      val plug2 = plug.exec { e =>
-        e.add()
-        e.add(new UtauElement(Map("Intensity" -> "10", "Lyric" -> "‚Ä‚·")))
+      val plug2 = plug.flatMap { n =>
+        List(n.get,new UtauElement(Map("Intensity" -> "10", "Lyric" -> "ã¦ã™")))
       }
       plug2.node(0).get.intensity must_== 100
-      plug2.node(0).get.lyric must_== "‚©"
+      plug2.node(0).get.lyric must_== "ã‹"
       plug2.node(1).get.intensity must_== 10
-      plug2.node(1).get.lyric must_== "‚Ä‚·"
+      plug2.node(1).get.lyric must_== "ã¦ã™"
       plug2.node(2).get.intensity must_== 100
-      plug2.node(2).get.lyric must_== "‚é"
+      plug2.node(2).get.lyric must_== "ã‚‹"
       plug2.node(3).get.intensity must_== 10
-      plug2.node(3).get.lyric must_== "‚Ä‚·"
+      plug2.node(3).get.lyric must_== "ã¦ã™"
     }
   }
-
   //output
   "output" should {
     val a = "src/test/scala/jp/gr/java_conf/frontier/utauplug/UtauPlug_test.ust"
@@ -107,7 +136,7 @@ class UtauPlugSpec extends Specification {
       }
       plug.output(p)
       val plug2 = UtauPlug.fromFile(p)
-      plug2.node(0).get.lyric must_== "‚©"
+      plug2.node(0).get.lyric must_== "ã‹"
     }
   }
 

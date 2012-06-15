@@ -11,27 +11,27 @@ class UtauElementSpec extends Specification {
 
   "attr" should {
     "set attr Volume" in {
-      val elm = new UtauElementBuilder()
+      val elm = new UtauElement.Builder()
       elm.attr("Volume", "100")
       elm.build.attr("Volume") must be matching "100"
     }
     "set and update attr Volume" in {
-      val elm = new UtauElementBuilder()
+      val elm = new UtauElement.Builder()
       elm.attr("Volume", "100")
       elm.attr("Volume", "200")
       elm.build.attr("Volume") must be matching "200"
     }
     "get null attr" in {
-      val elm = new UtauElementBuilder()
+      val elm = new UtauElement.Builder()
       elm.build.attr("Volume") must be matching ""
     }
   }
 
   "attr accessor" should {
-    val elm = new UtauElementBuilder()
+    val elm = new UtauElement.Builder()
     "lyric" in {
-      elm.lyric = "Ç§"
-      elm.build.lyric must be matching "Ç§"
+      elm.lyric = "„ÅÜ"
+      elm.build.lyric must be matching "„ÅÜ"
     }
 
     "Note" in {
@@ -85,7 +85,7 @@ class UtauElementSpec extends Specification {
 
   "clear" should {
     "all attr clear" in {
-      val elm = new UtauElementBuilder()
+      val elm = new UtauElement.Builder()
       elm.attr("Volume", "100")
       elm.attr("Moduration", "100")
       elm.clear
@@ -93,7 +93,7 @@ class UtauElementSpec extends Specification {
       elm.build.attr("Moduration") must be matching ""
     }
     "Volume attr clear" in {
-      val elm = new UtauElementBuilder()
+      val elm = new UtauElement.Builder()
       elm.attr("Volume", "100")
       elm.attr("Moduration", "100")
       elm.clear("Volume")
@@ -103,37 +103,37 @@ class UtauElementSpec extends Specification {
   }
 
   "isRest" should {
-    val elm = new UtauElementBuilder()
+    val elm = new UtauElement.Builder()
     "rest note" in {
       elm.lyric = "R"
       elm.build.isRest must beTrue
     }
     "normal note" in {
-      elm.lyric = "Ç†"
+      elm.lyric = "„ÅÇ"
       elm.build.isRest must beFalse
     }
   }
 
   "isSelected" should {
     "prev" in {
-      val elm = new UtauElementBuilder("#PREV")
+      val elm = new UtauElement.Builder("#PREV")
       elm.build.isSelected must beFalse
     }
     "next" in {
-      val elm = new UtauElementBuilder("#NEXT")
+      val elm = new UtauElement.Builder("#NEXT")
       elm.build.isSelected must beFalse
     }
     "note" in {
-      val elm = new UtauElementBuilder("#0004")
+      val elm = new UtauElement.Builder("#0004")
       elm.build.isSelected must beTrue
     }
   }
 
   "output" should {
     "test1" in {
-      val elm = new UtauElementBuilder("#0004")
+      val elm = new UtauElement.Builder("#0004")
       elm.length = 240
-      elm.lyric = "Ç©"
+      elm.lyric = "„Åã"
       elm.noteNum = 62
       elm.intensity = 100
       elm.moduration = 0
@@ -143,8 +143,9 @@ class UtauElementSpec extends Specification {
       elm.build.output(sb)
 
       val in = getClass().getResourceAsStream("UtauElement_OutputTest.ust")
+
       try {
-        val sample = Source.fromInputStream(in).getLines.toList
+        val sample = Source.fromInputStream(in, "SJIS").getLines.toList
         sb.toString.split(elm.build.nl).toList must haveTheSameElementsAs(sample)
       } finally {
         in.close

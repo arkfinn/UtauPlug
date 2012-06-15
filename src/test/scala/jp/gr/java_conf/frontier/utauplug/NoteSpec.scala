@@ -36,7 +36,7 @@ class NoteSpec extends Specification {
 
 	//object Note
 
-	"—lX‚È¶¬•û–@" should{
+	"æ§˜ã€…ãªç”Ÿæˆæ–¹æ³•" should{
 		"by num" in {
 			Note(24).num must_==24
 		}

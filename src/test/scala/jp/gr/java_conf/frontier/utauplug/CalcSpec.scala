@@ -14,8 +14,8 @@ class CalcSpec extends Specification {
     "= is Set" in { Calc("=") must_== Calc.Set }
   }
 
-  //implit‚Ìo”Ô‚©
-  //1.calc(Calculation.Add, 2)‚Æ‚©‚É‚µ‚½‚¢
+  //implitã®å‡ºç•ªã‹
+  //1.calc(Calculation.Add, 2)ã¨ã‹ã«ã—ãŸã„
   "do" should{
     "1+2" in{Calc.run(1, Calc.Add, 2) must_==3}
     "5-3" in{Calc.run(5, Calc.Sub, 3) must_==2}

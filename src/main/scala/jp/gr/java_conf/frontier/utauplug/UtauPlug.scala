@@ -6,59 +6,50 @@ import scala.collection.mutable.ListBuffer
 import scala.annotation.tailrec
 import java.io.FileWriter
 import java.io.File
+import java.io.OutputStreamWriter
+import java.io.FileOutputStream
 
-class UtauPlug(var filepath: String) {
-  var list = List[UtauElement]()
-  var setting, prev, next: UtauElement = null
+class UtauPlug(
+  val filepath: String,
+  val list: List[UtauElement],
+  val prev: UtauElement = null,
+  val next: UtauElement = null,
+  val setting: UtauElement = null) {
+
   def node(i: Int) = Node(this, list(i))
 
   //  def foreach[U](f: Node => U): Unit = for (a <- list) f(Node(this, a))
 
-  class ExecElement(val node: Node) {
-    var list = new ListBuffer[UtauElement]
-    def add(e: UtauElement) { list += e }
-    def add() { add(node.get) }
+  def ÔΩçap(f: Node => UtauElement): UtauPlug = {
+    new UtauPlug(filepath, list.map(a => f(Node(this, a))), prev, next, setting)
   }
 
-  def exec(f: ExecElement => Unit): UtauPlug = {
-    val res = new ListBuffer[UtauElement]
-    for (a <- list) {
-      val e = new ExecElement(Node(this, a))
-      f(e)
-      for (b <- e.list) res += b
-    }
-    val u = new UtauPlug(filepath)
-    u.list = res.toList
-    u.setting = setting
-    u.prev = prev
-    u.next = next
-    u
+  def flatMap(f: Node => List[UtauElement]): UtauPlug = {
+    new UtauPlug(filepath, list.flatMap(a => f(Node(this, a))), prev, next, setting)
   }
 
   def output(filepath: String) = {
     val s = new StringBuilder
     for (a <- list) a.output(s)
-    val filewriter = new FileWriter(new File(filepath));
+    val filewriter = new OutputStreamWriter (new FileOutputStream(filepath), "SJIS");
     try {
       filewriter.write(s.toString());
     } finally {
       filewriter.close();
     }
   }
-
 }
 
 object UtauPlug {
   def fromFile(filepath: String): UtauPlug = {
-
     val out = new FileInputStream(filepath)
-    val list = ListBuffer.empty[UtauElementBuilder]
-    var setting, prev, next: UtauElementBuilder = null
+    val list = ListBuffer.empty[UtauElement.Builder]
+    var setting, prev, next: UtauElement.Builder = null
     try {
-      var elm: UtauElementBuilder = null
-      for (line <- Source.fromInputStream(out).getLines() if line.nonEmpty) {
+      var elm: UtauElement.Builder = null
+      for (line <- Source.fromInputStream(out, "SJIS").getLines() if line.nonEmpty) {
         if (line.startsWith("[")) {
-          elm = new UtauElementBuilder(line.slice(1, line.size - 1))
+          elm = new UtauElement.Builder(line.slice(1, line.size - 1))
           elm.blockName match {
             case "#SETTING" => setting = elm
             case "#PREV" => prev = elm
@@ -75,99 +66,12 @@ object UtauPlug {
     } finally {
       out.close
     }
-    val res = new UtauPlug(filepath)
-    if (setting != null) res.setting = setting.build
-    if (prev != null) res.prev = prev.build
-    if (next != null) res.next = next.build
-    res.list = list.map(_.build).toList
-    res
+    new UtauPlug(
+      filepath,
+      list.map(_.build).toList,
+      if (prev != null) prev.build else null,
+      if (next != null) next.build else null,
+      if (setting != null) setting.build else null)
   }
 
 }
-
-//namespace UtauPluginSet
-//{
-//
-//    public class UtauData
-//    {
-//        static public void setup(string filepath)
-//        {
-//            instance = new UtauData(filepath);
-//        }
-//
-//        static private UtauData instance;
-//
-//        static public UtauData getInstance()
-//        {
-//            if (instance == null)
-//            {
-//                throw new ApplicationException("ïKÇ∏setupÇçsÇ¡Çƒâ∫Ç≥Ç¢");
-//            }
-//            return instance;
-//        }
-//
-//        private string filepath;
-//
-//        public UtauElement SettingElement;
-//        private List<UtauElement> mElements;
-//
-//        protected List<UtauElement> Elements
-//        {
-//            get
-//            {
-//                if (mElements == null)
-//                {
-//                    mElements = new List<UtauElement>();
-//                }
-//                return mElements;
-//            }
-//        }
-//
-//
-//        public void output()
-//        {
-//            StringBuilder sb = new StringBuilder();
-//            foreach (UtauElement v in Elements)
-//            {
-//                v.output(sb);
-//            }
-//
-//            using (StreamWriter writer = new StreamWriter(filepath, false, Encoding.GetEncoding("Shift_JIS")))
-//            {
-//                writer.Write(sb.ToString());
-//            }
-//        }
-//
-
-//        public void InsertBefore(UtauElement elm, UtauElement insert_elm)
-//        {
-//            insert_elm.BlockName = "[#INSERT]";
-//            int index = Elements.IndexOf(elm);
-//            Elements.Insert(index, insert_elm);
-//        }
-//
-//        public UtauElement GetNewElement()
-//        {
-//            return new UtauElement();
-//        }
-//
-//        static private List<Note> noteList = null;
-//        static public IList<Note> GetNoteList()
-//        {
-//            if (noteList == null)
-//            {
-//                noteList = new List<Note>();
-//                for (int i = 107; 24 <=i ; i--)
-//                {
-//                    noteList.Add(new Note(i));
-//                }
-//            }
-//            return noteList.AsReadOnly();
-//        }
-//
-//    }
-//
-//    public delegate void UtauElementEventHandler(int key, UtauElement prev, UtauElement now, UtauElement next);
-//
-//
-//}

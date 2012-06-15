@@ -26,7 +26,7 @@ class FlagsSpec extends Specification {
   }
 
   "marge" should {
-    "Flags‚Æcalculator‚ð¬‚º‚½V‚µ‚¢ƒŠƒXƒg‚ð•Ô‚·" in {
+    "Flagsã¨calculatorã‚’æ··ãœãŸæ–°ã—ã„ãƒªã‚¹ãƒˆã‚’è¿”ã™" in {
       val f = Flags.parse("g30Y50y80")
       val c = Flags.calculator("g-20Y0y%25")
       f.calclate(c) must haveTheSameElementsAs(Map("g" -> 10, "Y" -> 0, "y" -> 20))

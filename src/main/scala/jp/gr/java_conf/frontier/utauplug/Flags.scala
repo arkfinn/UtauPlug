@@ -3,7 +3,7 @@ import scala.util.control.Exception._
 import scala.collection.mutable.HashMap
 
 /**
- * Flags‚ğˆµ‚¤ƒNƒ‰ƒX
+ * Flagsã‚’æ‰±ã†ã‚¯ãƒ©ã‚¹
  */
 class Flags extends HashMap[String, Int] {
   def calclate(c: Flags.Calculator): Flags = {
@@ -16,7 +16,7 @@ class Flags extends HashMap[String, Int] {
   }
 
   /**
-   * Flags•¶š—ñ‚É•ÏŠ·B‚±‚Ì•¶š—ñ‚ğ‚»‚Ì‚Ü‚ÜUTAU‚ÌFlagsw’è‚Ég‚¦‚é
+   * Flagsæ–‡å­—åˆ—ã«å¤‰æ›ã€‚ã“ã®æ–‡å­—åˆ—ã‚’ãã®ã¾ã¾UTAUã®FlagsæŒ‡å®šã«ä½¿ãˆã‚‹
    */
   override def toString: String = {
     val buf = new StringBuilder
@@ -26,7 +26,7 @@ class Flags extends HashMap[String, Int] {
 }
 
 /**
- * Flags‚¨‚æ‚ÑŒvZƒ‹[ƒ‹‚Ìì¬—p
+ * FlagsãŠã‚ˆã³è¨ˆç®—ãƒ«ãƒ¼ãƒ«ã®ä½œæˆç”¨
  */
 object Flags {
   type Calculator = HashMap[String, (Calc.Value, Int)]
@@ -35,7 +35,7 @@ object Flags {
   private def to(v: String): Int = allCatch opt v.toInt getOrElse 0
 
   /**
-   * •¶š—ñ‚©‚çFlagsƒNƒ‰ƒX‚ğ¶¬
+   * æ–‡å­—åˆ—ã‹ã‚‰Flagsã‚¯ãƒ©ã‚¹ã‚’ç”Ÿæˆ
    */
   def parse(str: String): Flags = {
     def getKV(s: String, f: Flags): Flags = {
@@ -51,10 +51,10 @@ object Flags {
   }
 
   /**
-   * •¶š—ñ‚©‚çFlagsŒvZmap‚ğì¬B
-   * ‘®‚Í(key + ‰‰Zq(Calc,isOp‚Å—LŒø‚È‚à‚Ì) + ’l)‚Ì—…—ñ
-   * ‰‰ZqÈ—ª‚ÍCalc.Set‚Æ‚È‚éB
-   * ‚Ü‚½‰‰Zq‚ğˆê‚ÂˆÈãİ’è‚µ‚½Û‚Ì“®ì‚Í•ÛØ‚µ‚Ä‚¢‚È‚¢B
+   * æ–‡å­—åˆ—ã‹ã‚‰Flagsè¨ˆç®—mapã‚’ä½œæˆã€‚
+   * æ›¸å¼ã¯(key + æ¼”ç®—å­(Calc,isOpã§æœ‰åŠ¹ãªã‚‚ã®) + å€¤)ã®ç¾…åˆ—
+   * æ¼”ç®—å­çœç•¥æ™‚ã¯Calc.Setã¨ãªã‚‹ã€‚
+   * ã¾ãŸæ¼”ç®—å­ã‚’ä¸€ã¤ä»¥ä¸Šè¨­å®šã—ãŸéš›ã®å‹•ä½œã¯ä¿è¨¼ã—ã¦ã„ãªã„ã€‚
    */
   def calculator(str: String): Calculator = {
     def getKV(s: String, f: Calculator): Calculator = {
