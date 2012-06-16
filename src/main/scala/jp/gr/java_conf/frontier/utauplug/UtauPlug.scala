@@ -31,7 +31,7 @@ class UtauPlug(
   def output(filepath: String) = {
     val s = new StringBuilder
     for (a <- list) a.output(s)
-    val filewriter = new OutputStreamWriter (new FileOutputStream(filepath), "SJIS");
+    val filewriter = new OutputStreamWriter(new FileOutputStream(filepath), "SJIS");
     try {
       filewriter.write(s.toString());
     } finally {
@@ -56,12 +56,7 @@ object UtauPlug {
             case "#NEXT" => next = elm
             case _ => list += elm
           }
-        } else {
-          if (line.contains("=")) {
-            val a = line.split('=')
-            elm.attr(a(0), a(1))
-          }
-        }
+        } else elm.attrFromString(line)
       }
     } finally {
       out.close

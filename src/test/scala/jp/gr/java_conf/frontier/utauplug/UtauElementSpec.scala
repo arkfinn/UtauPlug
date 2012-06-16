@@ -158,7 +158,7 @@ class UtauElementSpec extends Specification {
       val a = new UtauElement
       a.intensity must_== 100
       val b = a.builder
-      b.intensity += 10
+      b.intensity +=  10
       val c = b.build
       c.intensity must_== 110
       val d = c.builder

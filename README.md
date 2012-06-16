@@ -1,31 +1,28 @@
 UtauPlug
 ======================
-Utau�v���O�C�����쐬����ۂɖʓ|��ust�t�@�C���̓ǂݍ��݂�A�ꊇ�������ȒP�ɍs�����߂̃v���O�C���ł��B
-�ȑO��.Net�ɂĊJ�������Ă����v���W�F�N�g�̈ڐA�`���P�łƂȂ�܂��B
+Utauプラグインを作成する際に面倒なustファイルの読み込みや、一括処理を簡単に行うためのプラグインです。
+以前は.Netにて開発をしていたプロジェクトの移植〜改善版となります。
 
-### �Ȃ�Scala�H ###
+### なぜScala？ ###
 
-1. Mac�łւ̓W�J�����܂��Ajar�ɂ��v���O�C���񋟂����
-2. �������낻������������
+1. Mac版への展開も踏まえ、jarによるプラグイン提供を画策
+2. おもしろそうだったから
 
-�g����
+使い方
 ----
 
-	//�t�@�C���p�X���w�肵�ēǂݍ��݁B�N������args���p��z��
+	//ファイルパスを指定して読み込み。起動時のargs利用を想定
 	val plug = UtauPlug.fromFile(filePath)
-	//exec���s�Ŋe�v�f�����[�v�ł���
-	val plug2 = plug.exec { e =>
-	  //���ɏC�������Ȃ��ꍇ��add���s�ł��̂܂܂̒l������
-	  e.add()
-	  //e.node��node�擾�Bnode.get�őΏۂ̗v�f�Anode.prev,node.next�őO��̗v�f������
-	  val elm = e.node.get
-	  //builder���ĂԂ��Ƃŗv�f�𑀍�ł���
+	//flatMap, mapが使えます
+	val plug2 = plug.flatMap { n =>
+	  //getで対象の要素、n.prev,n.nextで前後の要素が取れる
+	  val elm = n.get
+	  //builderを呼ぶことで要素を操作できる
 	  val b = elm.bulder
 	  b.intensity += 10
-	  //�ύX��̗v�f��add
-	  e.add(b.build)
-	  //�V�K�̗v�f��ǉ����邱�Ƃ��ł���
-	  e.add(new UtauElement(Map("Intensity" -> "10", "Lyric" -> "�Ă�")))
+	  val changed_elm = b.build
+	  //flatMapはUtauElementをListで返す。新規の要素を追加することもできる
+	  List(elm, changed_elm, new UtauElement(Map("Intensity" -> "10", "Lyric" -> "てす")))
 	}
 
-���̂��������܂��B
+実例は作成されたプラグインを参考にどうぞ
