@@ -168,4 +168,23 @@ class UtauElementSpec extends Specification {
 
     }
   }
+
+  "attrFromString" should{
+    "a=b" in{
+      val a = new UtauElement().builder
+      a.attrFromString("a=b")
+      a.attr("a") must_=="b"
+    }
+
+       "a=" in{
+      val a = new UtauElement().builder
+      a.attrFromString("a=")
+      a.attr("a") must_==""
+    }
+   "ab" in{
+      val a = new UtauElement().builder
+      a.attrFromString("ab")
+      a.attr("ab") must_==""
+    }
+  }
 }

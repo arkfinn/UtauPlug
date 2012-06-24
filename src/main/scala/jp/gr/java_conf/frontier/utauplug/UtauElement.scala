@@ -40,8 +40,8 @@ protected trait UtauElementAttr {
   def velocity: Int = allCatch opt attr("Velocity").toInt getOrElse 100
 
   /*以下は既知の値だが未設定
+   * ヘルパークラスにすると思う
    * flags Nフラグ（値無しフラグ）に対応していない。複数文字のフラグは廃止して1文字ずつ分割すべきかも
-   * Velocity 子音速度 0～200  def 100
    *
    * Bre Bフラグとして登録される
    * No Formant Filter Nフラグとして登録される
@@ -52,7 +52,7 @@ protected trait UtauElementAttr {
    * PBY ,区切り少数第一位　たぶん最初と最後を0としている
    * PBM　ピッチ曲線の形
    * VBR ビブラート　長さ,周期,深さ,入,出,位相,高さ,不明
-   *
+   * Envelope　エンベロ
    */
 }
 
@@ -92,6 +92,9 @@ class UtauElement(
 }
 
 object UtauElement {
+
+  lazy val delete: UtauElement = new UtauElement(blockName = "#DELETE")
+
   class Builder(
     val blockName: String = "#INSERT",
     attrMap: MutableMap[String, String] = MutableMap.empty[String, String]) extends UtauElementAttr {
@@ -120,7 +123,7 @@ object UtauElement {
     def attrFromString(str: String): String = {
       if (str.contains("=")) {
         val a = str.split('=')
-        attr(a(0), a(1))
+        if (1 < a.size) attr(a(0), a(1)) else attr(a(0), "")
         a(0)
       } else {
         attr(str, "")
